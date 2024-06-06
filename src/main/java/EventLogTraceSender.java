@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EventLogTraceSender {
-    private static final String GITHUB_API_URL = "https://api.github.com/repos/newrelic/centurion/community/profile";
+    private static final String GITHUB_API_URL = "https://api.github.com/repos/newrelic/node-newrelic/community/profile";
     private static final String GITHUB_TOKEN = "";  // Set your GitHub token here
     private static final String NEW_RELIC_INSERT_KEY = ""; // Set your New Relic insert key here
     private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json");
@@ -59,13 +59,14 @@ public class EventLogTraceSender {
         long timestamp = Instant.now().toEpochMilli();
         Attributes commonAttributes = new Attributes()
                 .put("repository.owner", "newrelic")
-                .put("repository.name", "centurion")
+                .put("repository.name", "node-newrelic")
                 .put("source", "github")
                 .put("fetched_at", Instant.now().toString());
 
         metricBuffer.addMetric(new Gauge("github.community.health_percentage", healthPercentage, timestamp, commonAttributes));
         metricBuffer.addMetric(new Gauge("github.community.description_length", descriptionLength, timestamp, commonAttributes));
         metricBuffer.addMetric(new Gauge("github.community.updated_at_length", updatedAtLength, timestamp, commonAttributes));
+
         metricBatchSender.sendBatch(metricBuffer.createBatch());
 
         // Send events to New Relic
